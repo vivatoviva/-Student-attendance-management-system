@@ -1,4 +1,4 @@
-package teacherpage;
+package studentpage;
 
 import java.awt.Color;
 import java.awt.Font;

@@ -1,5 +1,9 @@
 package teacherpage;
-
+/* 
+ * 功能：教师管理页面
+ * 步骤：实现教师管理页面
+ * author：李根
+ */ 
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -17,11 +21,7 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-/* 
- * 功能：教师管理页面
- * 步骤：实现教师管理页面
- * author：**
- */ 
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -34,6 +34,9 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 
+import DB.Update;
+import DB.insearch1;
+
 public class TeacherPage extends JPanel implements ActionListener{
     private static TeacherPage instance=null;
 	private Query query;//查询组件
@@ -42,8 +45,8 @@ public class TeacherPage extends JPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	
 	private TeacherPage(){
-		
 		setLayout(null);
+		setOpaque(false);
 		query  = new Query();
 		query.setBounds(0,0,1400,60);
 		query.button.addActionListener(this);
@@ -56,7 +59,7 @@ public class TeacherPage extends JPanel implements ActionListener{
 		add(friend);
 		
 		check = new Check();
-		check.setBounds(10, 80, 930,900);
+		check.setBounds(10, 80, 930,500);
 		check.setVisible(false);
 		check.title.button.addActionListener(this);
 		add(check);
@@ -82,35 +85,20 @@ public class TeacherPage extends JPanel implements ActionListener{
 		//查询按钮点击效果
 		JTable table = check.item.table;//check中的表格
 		if(e.getSource()==query.button){
-			System.out.println(query.text.getText());
 			String str = query.text.getText();
-			
-			TableModel.data = new String[][] {{ "2016210978", "李根1", "正常" },{ "20162109789", "杨东山", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" }};        
-			if(str.equals("03011601")) {
-				TableModel.data = new String[][] { { "2016210978", "李根2", "正常" },{ "20162109789", "杨东山", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" }};        
-				table.updateUI();
-				table.repaint();
-				table.revalidate(); 
-				table.validate();
-				table.setModel(check.item.tableModel);
-				check.item.sp.getViewport().add(table, null);
-				check.item.sp.revalidate();
-				check.item.tableModel.fireTableStructureChanged();// JTable刷新结构
-				check.item.tableModel.fireTableDataChanged();// 刷新JTable数据 
-				check.item.setUpSportColumn(table, table.getColumnModel().getColumn(2));
-				check.item.makeFace();
-				check.item.setVisible(false);
-				check.item.validate();
-				check.item.setVisible(true);
-			}
+			int no = Integer.parseInt(str);
+			insearch1 db=new insearch1();
+			TableModel.data = db.get(str);
+			table.updateUI();
 			check.setVisible(true);
 		}else if(e.getSource()==check.title.button) {
 			//保存按钮点击执行操作
-			System.out.println("保存操作");
 			int count=table.getSelectedRow();
+			int rows = table.getRowCount();
+			Update db = new Update();
 			for(int i=0;i<table.getRowCount();i++){
-				System.out.println(table.getValueAt(i, 0).toString()+table.getValueAt(i, 2).toString());
-			}
+				db.updateKaoqing(table.getValueAt(i, 0).toString(), query.text.getText(), table.getValueAt(i, 2).toString());
+			}			
 		}
 	}
 }

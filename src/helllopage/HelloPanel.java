@@ -3,7 +3,7 @@ package helllopage;
 /* 
  * 功能：欢迎页面
  * 步骤：实现欢迎页面
- * author：**
+ * author：李根
  */  
 
 import javax.swing.JLabel;

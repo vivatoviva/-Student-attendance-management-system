@@ -11,6 +11,8 @@ import org.w3c.dom.events.EventTarget;
 import org.w3c.dom.events.MouseEvent;
 import org.w3c.dom.views.AbstractView;
 
+import DB.insearch3;
+
 public class TableListen implements MouseListener{
 	JTable table;
 	Friend friend;
@@ -24,8 +26,10 @@ public class TableListen implements MouseListener{
 			int a = ((JTable) table).getSelectedRow();
 			String studentno = ((JTable) table).getValueAt(a,0).toString();
 			String studentname =  ((JTable) table).getValueAt(a,1).toString();
-			
-			friend.updata(studentname, studentno, "45465465");
+			insearch3 n1=new insearch3();
+			insearch3 db = new insearch3();
+			System.out.println(db.get(studentno));
+			friend.updata(studentname, studentno,db.get(studentno));
 		}
 	}
 	public static TableListen getInstance() {
@@ -37,11 +41,11 @@ public class TableListen implements MouseListener{
 	}
 	void setTable(JTable table) {
 		this.table = table;
+
 	}
 
 	@Override
 	public void mousePressed(java.awt.event.MouseEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -58,7 +62,6 @@ public class TableListen implements MouseListener{
 
 	@Override
 	public void mouseExited(java.awt.event.MouseEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 

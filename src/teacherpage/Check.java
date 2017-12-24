@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseListener;
 import java.sql.Date;
 import java.text.DateFormat;
@@ -36,7 +38,7 @@ public class Check extends JPanel{
 		title = new CheckTitle();
 		title.setBounds(0,0,900,30);
 		item = new CheckItem();
-		item.setBounds(0, 50, 900, 500);
+		item.setBounds(0, 50, 900, 450);
 	}
 }
 class CheckTitle extends JPanel{
@@ -86,25 +88,38 @@ class CheckItem extends JPanel{
     	/* 设置几个可选项目 */
         JComboBox comboBox = new JComboBox();
         comboBox.addItem("正常");
-        comboBox.addItem("缺勤");
+        comboBox.addItem("旷课");
         comboBox.addItem("迟到");
         comboBox.addItem("早退");
+        comboBox.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				int columns = table.getSelectedColumn();
+				int rows = table.getSelectedRow();
+				String staus = ((JComboBox) e.getSource()).getSelectedItem().toString();
+				makeFace();
+			}
+		});
         Column.setCellEditor(new DefaultCellEditor(comboBox));
         DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
         Column.setCellRenderer(renderer);
     }
     /* 表格样式进行修改 */
-    public void makeFace() {  
+    private void makeFace() { 
         table.setRowHeight(25);  
         DefaultTableCellRenderer tcr = new DefaultTableCellRenderer() {  
             public Component getTableCellRendererComponent(JTable table,Object value, boolean isSelected, boolean hasFocus,int row, int column) {
-            	if (row % 2 == 0) {  
-                    setBackground(new Color(203, 203, 203));
-                } else {  
-                    setBackground(Color.WHITE);  
-                }  
-                return super.getTableCellRendererComponent(table, value,  
-                        isSelected, hasFocus, row, column);  
+            	if(table.getValueAt(row, 2).equals("迟到")) {
+           		 setBackground(new Color(250,235,215));
+	           	}else if(table.getValueAt(row, 2).equals("旷课")){
+	           		 setBackground(new Color(255,127,80));
+	           	}else if(table.getValueAt(row, 2).equals("早退")) {
+	           		 setBackground(new Color(30,144,255));
+	           	}else {
+	           		setBackground(new Color(202,255,112));
+	           	} 
+            	return super.getTableCellRendererComponent(table, value,isSelected, hasFocus, row, column);  
             }  
         };  
         for (int i = 0; i < table.getColumnCount(); i++) {  
@@ -116,8 +131,7 @@ class CheckItem extends JPanel{
 class TableModel extends AbstractTableModel {
     private boolean DEBUG = false;
     static String[] columnNames = new String[] { "学号", "姓名", "考勤" };
-    static String[][] data =  new String[][] { { "2016210978", "李根2", "正常" },{ "20162109789", "杨东山", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" },{ "1", "盖伦", "正常" }};        
-	
+    static String[][] data =  new String[][] { { "2016210978", "李根2", "正常" }};
     // 返回一共有多少行
     TableModel(){
     	System.out.println(data);

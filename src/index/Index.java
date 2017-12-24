@@ -21,6 +21,7 @@ import java.awt.event.ActionListener;
 public class Index {
 	public static void main(String[] args) {
 		HomePage homepage = new HomePage();
+		Anima.home = homepage;
 	}
 }
 class HomePage extends JFrame{
@@ -57,9 +58,9 @@ class HomePage extends JFrame{
 		teacherButton = new JButton("教师服务");
 		adminButton = new JButton("管理服务");
 		
-		studentButton.setBounds(0,60,100,30);
-		teacherButton.setBounds(100,60,100,30);
-		adminButton.setBounds(200,60,100,30);
+		studentButton.setBounds(0,60,462,30);
+		teacherButton.setBounds(462,60,462,30);
+		adminButton.setBounds(924,60,470,30);
 		
 		Icon studentIcon = new ImageIcon("学生.png");
 		Icon teacherIcon = new ImageIcon("教师.png");
@@ -83,14 +84,14 @@ class HomePage extends JFrame{
 		hello.setBounds(0,120,1400,800);
 		panel.add(hello);
 		hello.setOpaque(true);
-		hello.setBackground(Color.red);
-		hello.close();
+		hello.setBackground(Color.cyan);
+		hello.open();
 	}
 	void studentpage() {
 		StudentPanel student = StudentPanel.getInstance();
 		student.setBounds(0,120,1400,800);
 		student.setOpaque(true);
-		student.setBackground(Color.cyan);
+		//student.setBackground(Color.cyan);
 		panel.add(student);
 		student.close();
 	}
@@ -99,13 +100,12 @@ class HomePage extends JFrame{
 		teacher.setBounds(0,120,1400,800);
 		teacher.setOpaque(true);
 		panel.add(teacher);
-		teacher.open();
+		teacher.close();
 	}
 	void adminpage() {
 		AdminPage admin = AdminPage.getInstance();
 		admin.setBounds(0,120,1400,800);
 		admin.setOpaque(true);
-		admin.setBackground(Color.green);
 		panel.add(admin);
 		admin.close();
 	}
@@ -122,22 +122,43 @@ class Buttonaction implements ActionListener{
 			TeacherPage teacher = TeacherPage.getInstance();
 			AdminPage admin = AdminPage.getInstance();
 			if(str.equals("学生服务")) {
-				hello.close();
+				//hello.close();
+				openThread();
 				teacher.close();
 				student.open();
 				admin.close();
 			}else if (str.equals("教师服务")) {
-				hello.close();
+				//hello.close();
+				hello.setAlignmentY(750);
+				openThread();
 				teacher.open();
 				student.close();
 				admin.close();
 			}else {
-				hello.close();
+				//hello.close();
+				openThread();
 				teacher.close();
 				student.close();
 				admin.open();
 			}		
 	}
+	void openThread() {
+		Anima anima = new Anima();
+		Thread thread = new Thread(anima);
+		thread.start();
+	}
+}
+class Anima implements Runnable{
+	HelloPanel hello = HelloPanel.getInstance();
+	static HomePage home;
+	public void run() {
+		int i = 1;
+		while (hello.getY()<730) {
+			i++;
+			hello.setBounds(0,120+i,1400,800);
+			home.validate();
+		}
+	}	
 }
 
 
